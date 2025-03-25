@@ -21,7 +21,7 @@ export const uploadInvoice = async (file) => {
 };
 export const getInvoices = async () => {
   try {
-    const response = await axios.get(`${API_URL}/invoices`);
+    const response = await axios.get(`${API_URL}invoices`);
 
     return response.data;
   } catch (error) {
