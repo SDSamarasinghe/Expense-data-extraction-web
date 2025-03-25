@@ -4,6 +4,7 @@ import { uploadInvoice } from "../apiService";
 const UploadInvoice = () => {
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -11,6 +12,7 @@ const UploadInvoice = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const data = await uploadInvoice(file);
       setMessage("Invoice uploaded successfully!");
@@ -18,6 +20,8 @@ const UploadInvoice = () => {
     } catch (error) {
       setMessage("Failed to upload invoice.");
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -26,7 +30,9 @@ const UploadInvoice = () => {
       <h2>Upload Invoice</h2>
       <form onSubmit={handleSubmit}>
         <input type="file" onChange={handleFileChange} />
-        <button type="submit">Upload</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Uploading..." : "Upload"}
+        </button>
       </form>
       {message && <p>{message}</p>}
     </div>
