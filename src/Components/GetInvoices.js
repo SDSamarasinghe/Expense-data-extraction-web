@@ -48,9 +48,6 @@ const GetInvoices = () => {
       <button className="upload-button" onClick={handleUpload}>
         Upload Invoice
       </button>
-      <button className="refresh-button" onClick={fetchInvoices}>
-        Refresh
-      </button>
       <table>
         <thead>
           <tr>
