@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getInvoices } from "../apiService";
+import "./GetInvoices.css"; // Import the CSS file for styling
 
 const GetInvoices = () => {
   const [invoices, setInvoices] = useState([]);
@@ -8,26 +9,29 @@ const GetInvoices = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchInvoices = async () => {
-      try {
-        const data = await getInvoices();
-        console.log("🚀 ~ fetchInvoices ~ data:", data);
-        setInvoices(data);
-      } catch (error) {
-        console.log("🚀 ~ fetchInvoices ~ error:", error);
-        console.error("Failed to fetch invoices:", error);
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchInvoices = async () => {
+    setLoading(true);
+    try {
+      const data = await getInvoices();
+      setInvoices(data);
+    } catch (error) {
+      console.error("Failed to fetch invoices:", error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchInvoices();
   }, []);
 
   const handleEdit = (id) => {
     navigate(`/update-invoice/${id}`);
+  };
+
+  const handleUpload = () => {
+    navigate("/upload-invoice");
   };
 
   if (loading) {
@@ -41,6 +45,12 @@ const GetInvoices = () => {
   return (
     <div>
       <h2>Invoices</h2>
+      <button className="upload-button" onClick={handleUpload}>
+        Upload Invoice
+      </button>
+      <button className="refresh-button" onClick={fetchInvoices}>
+        Refresh
+      </button>
       <table>
         <thead>
           <tr>
