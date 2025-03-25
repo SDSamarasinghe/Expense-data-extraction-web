@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+// filepath: /Users/macbook/Expense-data-extractor/src/App.js
+import React from "react";
+// import UploadInvoice from "./components/UploadInvoice";
+// import GetInvoices from "./components/GetInvoices";
+// import UpdateInvoiceCategory from "./components/UpdateInvoiceCategory";
+import UploadInvoice from "./Components/UploadInvoice";
+import GetInvoices from "./Components/GetInvoices";
+import UpdateInvoiceCategory from "./Components/UpdateInvoiceCategory";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Expense Data Extractor</h1>
+      <UploadInvoice />
+      <GetInvoices />
+      <UpdateInvoiceCategory />
     </div>
   );
-}
+};
 
 export default App;
