@@ -1,13 +1,29 @@
-// filepath: /Users/macbook/Expense-data-extractor/src/components/UpdateInvoiceCategory.js
-import React, { useState } from "react";
-import { updateInvoiceCategory } from "../apiService";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { getInvoiceById, updateInvoiceCategory } from "../apiService";
 
 const UpdateInvoiceCategory = () => {
-  const [id, setId] = useState("");
+  const { id } = useParams();
   const [category, setCategory] = useState("");
+  const [invoice, setInvoice] = useState(null);
   const [message, setMessage] = useState("");
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    const fetchInvoice = async () => {
+      try {
+        const data = await getInvoiceById(id);
+        setInvoice(data);
+        setCategory(data.category);
+      } catch (error) {
+        console.error("Failed to fetch invoice:", error);
+        setMessage("Failed to fetch invoice.");
+      }
+    };
+
+    fetchInvoice();
+  }, [id]);
+
+  const handleUpdateCategory = async (e) => {
     e.preventDefault();
     try {
       const data = await updateInvoiceCategory(id, category);
@@ -22,21 +38,33 @@ const UpdateInvoiceCategory = () => {
   return (
     <div>
       <h2>Update Invoice Category</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Invoice ID"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="New Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
-        <button type="submit">Update</button>
-      </form>
+      {invoice ? (
+        <form onSubmit={handleUpdateCategory}>
+          <div>
+            <label>Vendor: </label>
+            <span>{invoice.vendor}</span>
+          </div>
+          <div>
+            <label>Total: </label>
+            <span>{invoice.total}</span>
+          </div>
+          <div>
+            <label>Currency: </label>
+            <span>{invoice.currency}</span>
+          </div>
+          <div>
+            <label>Category: </label>
+            <input
+              type="text"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            />
+          </div>
+          <button type="submit">Update</button>
+        </form>
+      ) : (
+        <p>Loading...</p>
+      )}
       {message && <p>{message}</p>}
     </div>
   );
